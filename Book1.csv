@@ -1,0 +1,13 @@
+﻿Name,Description,StatementDescriptor,TaxCode,CurrencyCode,UnitAmount,ImageUrl,ExpiryDays
+LunaVPN 365-days access,LUNAVPN 365DAYS,LUNAVPN365USD,txcd_10000000,USD,9900,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,365
+LunaVPN 180-days access,LUNAVPN 180DAYS,LUNAVPN180USD,txcd_10000000,USD,7200,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,180
+LunaVPN 90-days access,LUNAVPN 90DAYS,LUNAVPN90USD,txcd_10000000,USD,3600,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,90
+LunaVPN 30-days access,LUNAVPN 30DAYS,LUNAVPN30USD,txcd_10000000,USD,1400,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,30
+LunaVPN 365-days access,LUNAVPN 365DAYS,LUNAVPN365GBP,txcd_10000000,GBP,9900,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,365
+LunaVPN 180-days access,LUNAVPN 180DAYS,LUNAVPN180GBP,txcd_10000000,GBP,7200,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,180
+LunaVPN 90-days access,LUNAVPN 90DAYS,LUNAVPN90GBP,txcd_10000000,GBP,3600,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,90
+LunaVPN 30-days access,LUNAVPN 30DAYS,LUNAVPN30GBP,txcd_10000000,GBP,1400,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,30
+LunaVPN 365-days access,LUNAVPN 365DAYS,LUNAVPN365EUR,txcd_10000000,EUR,9900,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,365
+LunaVPN 180-days access,LUNAVPN 180DAYS,LUNAVPN180EUR,txcd_10000000,EUR,7200,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,180
+LunaVPN 90-days access,LUNAVPN 90DAYS,LUNAVPN90EUR,txcd_10000000,EUR,3600,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,90
+LunaVPN 30-days access,LUNAVPN 30DAYS,LUNAVPN30EUR,txcd_10000000,EUR,1400,https://raw.githubusercontent.com/repasscloud/StripeNewProductCLI/main/27314.jpg,30
