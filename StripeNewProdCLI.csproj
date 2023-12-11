@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
     <PackageReference Include="stripe.net" Version="43.5.0" />
   </ItemGroup>
 
