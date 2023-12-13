@@ -5,6 +5,7 @@ using System.Globalization;
 using LunaVpnApi.Models.StripeCustom;
 using System.Text.Json;
 using System.Text;
+using System.Net.Http.Headers;
 
 namespace StripeNewProdCLI;
 class Program
@@ -15,7 +16,105 @@ class Program
     {
         StripeConfiguration.ApiKey = args[0];
         
-        if (args[1].ToLower() == "--create-links")
+        // upload VPS data (api function)
+        if (args[0].ToLower() == "--csv")
+        {
+            string csvFilePath = args[1];
+
+            var cultureInfo = CultureInfo.InvariantCulture;
+
+            if (!System.IO.File.Exists(csvFilePath))
+            {
+                Console.WriteLine($"File {csvFilePath} not exists");
+                Environment.Exit(1);
+            }    
+            else
+            {
+                Console.WriteLine($"Using csv: {csvFilePath}");
+            }
+
+            using (var reader = new StreamReader(csvFilePath))
+            using (var csv = new CsvReader(reader, new CsvConfiguration(cultureInfo)
+            {
+                HasHeaderRecord = true // to indicate that the CSV file has a header
+            }))
+            {
+                var records = csv.GetRecords<LunaVpnApi.Models.CIP.LunaVpnCustom.LunaCIP>();
+
+                foreach (LunaVpnApi.Models.CIP.LunaVpnCustom.LunaCIP i in records)
+                {
+                    string jsonData = JsonSerializer.Serialize(i);
+                    string apiUrl = args[2];
+                    var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                    string bearerToken = args[3];
+                    httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", bearerToken);
+
+                    HttpResponseMessage response = await httpClient.PostAsync(apiUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Response: " + responseBody);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Request failed with status code: " + response.StatusCode);
+                    }
+                }
+            }
+        }
+        
+        // create products in api (already in stripe) (api function)
+        else if (args[1].ToLower() == "--ingest-stripe-products")
+        {
+            string apiUrl = args[2];
+            string bearerToken = args[3];
+
+            var options = new ProductListOptions { Active = true, Limit = 100 };
+            var service = new ProductService();
+            StripeList<Product> products = service.List(options);
+
+            foreach (var stProd in products)
+            {
+                var dataToSend = new StripeLunaProduct
+                {
+                    ProductId = stProd.Id,
+                    ExpirationDays = string.IsNullOrEmpty(stProd.Description) ? 0 : int.Parse(System.Text.RegularExpressions.Regex.Replace(stProd.Description, "[^0-9]", "")),
+                };
+
+                string jsonData = JsonSerializer.Serialize(dataToSend);
+                
+                try
+                {
+                    // Create an HTTP request message
+                    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+                    request.Content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                    // Send the POST request
+                    HttpResponseMessage response = await httpClient.PostAsync(apiUrl, request.Content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read and display the response
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Response: " + responseBody);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Request failed with status code: " + response.StatusCode);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+        }
+
+        // create links (Stripe function)
+        else if (args[1].ToLower() == "--create-links")
         {
             string currency = args[2].ToLower();
 
@@ -58,6 +157,8 @@ class Program
                 paymentLinkService.Create(paymentLinkOptions);
             }
         }
+        
+        // create products in Stripe (Stripe function) and send to api
         else if (args[1].ToLower() == "--csv")
         {
             string csvFilePath = args[2];
@@ -131,6 +232,8 @@ class Program
                 }
             }
         }
+        
+        // legacy function
         else if (args.Length == 5)
         {
             var options = new ProductCreateOptions
