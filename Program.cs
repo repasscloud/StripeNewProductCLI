@@ -150,7 +150,11 @@ class Program
                     },
                     AfterCompletion = new PaymentLinkAfterCompletionOptions
                     {
-                        Type = "hosted_confirmation",
+                        Type = "redirect",
+                        Redirect = new PaymentLinkAfterCompletionRedirectOptions
+                        {
+                            Url = "https://localhost:52655/instance-configuration",
+                        }
                     },
                 };
                 var paymentLinkService= new PaymentLinkService();
